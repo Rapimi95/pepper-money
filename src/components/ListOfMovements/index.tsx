@@ -5,27 +5,20 @@ import ListItemText from '@mui/material/ListItemText';
 import { format } from 'date-fns';
 import Movement from '../../models/Movement';
 import classes from './styles.module.scss';
-import LoadingSpinner from '../LoadingSpinner';
 import useMovements from '../../hooks/useMovements';
 import { useAppDispatch } from '../../store/hooks';
 import { openExpenseDetailsModal } from '../../store/slices/movementsSlice';
 
 const ListOfMovements = () => {
-    const { data: movements, loading } = useMovements();
+    const { data: movements } = useMovements();
     const dispatch = useAppDispatch();
-
-    if (loading) {
-        return (
-            <LoadingSpinner />
-        );
-    }
 
     return (
         <List className={classes.listOfMovements} disablePadding>
             {movements?.map((movement: Movement) => (
                 <ListItem key={movement.id} className={classes.expenseItem} disablePadding>
                     <ListItemButton onClick={() => dispatch(openExpenseDetailsModal({ ...movement, id: movement.id }))}>
-                        <ListItemText primary={movement.description} secondary={movement.tag} />
+                        <ListItemText primary={movement.description} secondary={movement.category} />
                         <ListItemText
                             primary={new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(movement.amount)} 
                             secondary={format(new Date(movement.dateTime), 'dd/MM/yyyy')}
