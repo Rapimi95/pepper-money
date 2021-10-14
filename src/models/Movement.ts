@@ -1,16 +1,16 @@
 class Movement {
-    id: string;
+    id?: string;
     description: string;
     amount: number;
-    category: string;
+    categoryId: string;
     type: 'expense' | 'income';
-    dateTime: string;
+    dateTime: Date;
 
-    constructor ( id: string, description: string, amount: number, category: string, type: 'expense' | 'income', dateTime: string) {
+    constructor (description: string, amount: number, categoryId: string, type: 'expense' | 'income', dateTime: Date, id?: string) {
         this.id = id;
         this.description = description;
         this.amount = amount;
-        this.category = category;
+        this.categoryId = categoryId;
         this.type = type;
         this.dateTime = dateTime;
     }

@@ -1,11 +1,11 @@
-class Tag {
-    id: string;
+class Category {
+    id?: string;
     description: string;
 
-    constructor ( id: string, description: string) {
+    constructor ( description: string, id?: string) {
         this.id = id;
         this.description = description;
     }
 };
 
-export default Tag;
+export default Category;

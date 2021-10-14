@@ -1,7 +1,7 @@
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Autocomplete, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import useCollection from '../../hooks/useCollection';
 import Category from '../../models/Category';
 import classes from './styles.module.scss';
@@ -10,7 +10,7 @@ type MovementsFormProps = {
     formik: any,
 };
 
-const MovementsForm = ({ formik }: MovementsFormProps) => {
+const MovementForm = ({ formik }: MovementsFormProps) => {
     const { data: categories } = useCollection('categories');
 
     return (
@@ -30,11 +30,15 @@ const MovementsForm = ({ formik }: MovementsFormProps) => {
             <TextField
                 fullWidth
                 id="description"
+                name="description"
                 margin="dense"
                 label="Descripción"
                 type="text"
                 value={formik.values.description}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.description && !!formik.errors.description}
+                helperText={formik.touched.description && formik.errors.description}
             />
             <TextField
                 fullWidth
@@ -44,6 +48,9 @@ const MovementsForm = ({ formik }: MovementsFormProps) => {
                 type="number"
                 value={formik.values.amount}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.amount && !!formik.errors.amount}
+                helperText={formik.touched.amount && formik.errors.amount}
             />
             {/* <Autocomplete
                 fullWidth
@@ -59,19 +66,31 @@ const MovementsForm = ({ formik }: MovementsFormProps) => {
                 renderInput={(params) => <TextField {...params} label="Categoría" />}
             /> */}
             <FormControl fullWidth margin="dense">
-                <InputLabel id="category">Etiqueta</InputLabel>
+                <InputLabel
+                    id="categoryId"
+                    color={formik.touched.categoryId && formik.errors.categoryId ? 'error' : undefined}
+                >
+                    Categoría
+                </InputLabel>
                 <Select
-                    id="category"
-                    name="category"
-                    labelId="category"
-                    label="Etiqueta"
-                    value={formik.values.category}
+                    id="categoryId"
+                    name="categoryId"
+                    labelId="categoryId"
+                    label="Categoría"
+                    value={formik.values.categoryId}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.categoryId && !!formik.errors.categoryId}
                 >
                     {categories?.map((category: Category) => (
-                        <MenuItem key={category.id} value={category.description}>{category.description}</MenuItem>)
+                        <MenuItem key={category.id} value={category.id}>{category.description}</MenuItem>)
                     )}
                 </Select>
+                {formik.touched.categoryId && (
+                    <FormHelperText error={!!formik.errors.categoryId}>
+                        {formik.errors.categoryId}
+                    </FormHelperText>
+                )}
             </FormControl>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
@@ -85,4 +104,4 @@ const MovementsForm = ({ formik }: MovementsFormProps) => {
     );
 };
 
-export default MovementsForm;
+export default MovementForm;

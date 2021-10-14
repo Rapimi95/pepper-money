@@ -1,42 +1,71 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, orderBy, query, setDoc } from '@firebase/firestore';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { format } from 'date-fns';
+import { firebaseApp } from '../../firebase';
 import Movement from '../../models/Movement';
 
 interface MovementsState {
   movements: Movement[],
-  isAddExpensesModalOpen: boolean,
-  isExpenseDetailsModalOpen: boolean,
-  selectedMovement: Movement | null,
 };
 
 const initialState: MovementsState = {
   movements: [],
-  isAddExpensesModalOpen: false,
-  isExpenseDetailsModalOpen: false,
-  selectedMovement: null,
 };
+
+const database = getFirestore(firebaseApp);
+
+export const fetchMovements = createAsyncThunk(
+  'movements/fetchMovements',
+  async () => {
+    const collectionRef = collection(database, 'movements');
+    const collectionQuery = query(collectionRef, orderBy('dateTime', 'desc'));
+    const collectionSnapshot = await getDocs(collectionQuery);
+    const collectionData = collectionSnapshot.docs.map(doc => ({ 
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return collectionData as Movement[];
+  }
+);
+
+export const addMovement = createAsyncThunk(
+  'movements/addMovement',
+  async (movement: Movement) => {
+    await addDoc(collection(database, 'movements'), {
+      ...movement,
+      dateTime: format(movement.dateTime, 'yyyy/MM/dd hh:mm:ss'),
+    });
+  }
+);
+
+export const updateMovement = createAsyncThunk(
+  'movements/updateMovement',
+  async ({id, movement}: {id: string, movement: Movement}) => {
+    const collectionRef = collection(database, 'movements');
+    await setDoc(doc(collectionRef, id), {
+        ...movement,
+        dateTime: format(movement.dateTime, 'yyyy/MM/dd hh:mm:ss'),
+    });
+  }
+);
+
+export const deleteMovement = createAsyncThunk(
+  'movements/deleteMovement',
+  async (id: string) => {
+    const collectionRef = collection(database, 'movements');
+    await deleteDoc(doc(collectionRef, id));
+  }
+);
 
 export const movementsSlice = createSlice({
   name: 'movements',
   initialState,
-  reducers: {
-    openAddExpensesModal: state => { state.isAddExpensesModalOpen = true },
-    closeAddExpensesModal: state => { state.isAddExpensesModalOpen = false },
-    openExpenseDetailsModal: (state, action: PayloadAction<Movement>) => {
-      state.selectedMovement = action.payload;
-      state.isExpenseDetailsModalOpen = true;
-    },
-    closeExpenseDetailsModal: state => { state.isExpenseDetailsModalOpen = false },
-    addMovement: (state, action: PayloadAction<Movement>) => {
-      state.movements = [action.payload, ...state.movements];
-    },
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(fetchMovements.fulfilled, (state, action) => {
+      state.movements = action.payload;
+    });
   },
 });
-
-export const {
-  openAddExpensesModal,
-  closeAddExpensesModal,
-  openExpenseDetailsModal,
-  closeExpenseDetailsModal,
-} = movementsSlice.actions;
 
 export default movementsSlice.reducer;

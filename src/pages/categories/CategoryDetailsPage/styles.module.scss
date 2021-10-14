@@ -1,0 +1,9 @@
+.bottom {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    column-gap: 8px;
+    
+    :first-child {
+        justify-self: start;    
+    }
+}

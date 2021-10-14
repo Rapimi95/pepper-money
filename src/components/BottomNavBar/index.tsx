@@ -16,11 +16,11 @@ const BottomNavBar = () => {
             className={classes.root}
             value={value}
             onChange={(event, newValue) => setValue(newValue)}
-            showLabels
+            showLabels  
         >
-            <BottomNavigationAction component={Link} to={PATHS.summary} label="Resumen" icon={<PieChartIcon />} />
+            <BottomNavigationAction component={Link} to={PATHS.movements} label="Resumen" icon={<PieChartIcon />} />
             <BottomNavigationAction component={Link} to={PATHS.movements} label="Movimientos" icon={<RestoreIcon />} />
-            <BottomNavigationAction component={Link} to={PATHS.budget} label="Presupuesto" icon={<AssignmentIcon />} />
+            <BottomNavigationAction component={Link} to={PATHS.movements} label="Presupuesto" icon={<AssignmentIcon />} />
         </BottomNavigation>
     );
 };

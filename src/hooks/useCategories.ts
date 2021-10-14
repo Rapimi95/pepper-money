@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
-import { fetchMovements } from '../store/slices/movementsSlice';
+import { fetchCategories } from '../store/slices/categoriesSlice';
 import { useAppDispatch } from '../store';
 
-const useMovements = () => {
+const useCategories = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(fetchMovements());
+        dispatch(fetchCategories());
     }, [dispatch]);
 };
 
-export default useMovements;
+export default useCategories;
