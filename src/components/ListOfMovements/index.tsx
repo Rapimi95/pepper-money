@@ -9,6 +9,7 @@ import classes from './styles.module.scss';
 import { useAppSelector } from '../../store';
 import { PATHS } from '../../config/constants';
 import { useHistory } from 'react-router';
+import { Typography } from '@mui/material';
 
 const ListOfMovements = () => {
     const history = useHistory();
@@ -17,21 +18,28 @@ const ListOfMovements = () => {
 
     return (
         <List className={classes.listOfMovements} disablePadding>
-            {movements?.map((movement: Movement) => (
-                <ListItem key={movement.id} className={classes.listItem} disablePadding>
-                    <ListItemButton onClick={() => history.push(PATHS.movementDetails(movement.id))}>
-                        <ListItemText
-                            primary={movement.description}
-                            secondary={categories?.find((category: Category) => category.id === movement.categoryId)?.description}
-                        />
-                        <ListItemText
-                            primary={new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(movement.amount)} 
-                            secondary={format(new Date(movement.dateTime), 'dd/MM/yyyy')}
-                            className={classes.secondaryListItemText}
-                        />
-                    </ListItemButton>
-                </ListItem>
-            ))}
+            {movements?.map((movement: Movement) => {
+                const category = categories?.find((category: Category) => category.id === movement.categoryId)?.description;
+                const price = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(movement.amount);
+                const date = format(new Date(movement.dateTime), 'dd/MM/yyyy');
+                const color = movement.type === 'expense' ? 'error' : 'green';
+
+                return (
+                    <ListItem key={movement.id} className={classes.listItem} disablePadding>
+                        <ListItemButton onClick={() => history.push(PATHS.movementDetails(movement.id))}>
+                            <ListItemText
+                                primary={movement.description}
+                                secondary={category}
+                            />
+                            <ListItemText
+                                primary={<Typography color={color} component="span">{price}</Typography>}
+                                secondary={date}
+                                className={classes.secondaryListItemText}
+                            />
+                        </ListItemButton>
+                    </ListItem>
+                );
+            })}
         </List>
     );
 };
