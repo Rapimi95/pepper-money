@@ -1,7 +1,7 @@
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import { Autocomplete, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import useCollection from '../../hooks/useCollection';
 import Category from '../../models/Category';
 import classes from './styles.module.scss';
