@@ -6,8 +6,13 @@ import CategoriesPage from './pages/categories/CategoriesPage';
 import AddCategoryPage from './pages/categories/AddCategoryPage';
 import CategoryDetailsPage from './pages/categories/CategoryDetailsPage';
 import { PATHS } from './config/constants';
+import useMovements from './hooks/useMovements';
+import useCategories from './hooks/useCategories';
 
 const App = () => {
+  useMovements();
+  useCategories();
+
   return (
     <BrowserRouter>
       <Switch>
@@ -18,7 +23,6 @@ const App = () => {
         <Route path={PATHS.categoryDetails()} component={CategoryDetailsPage} />
         <Route path={PATHS.categories} component={CategoriesPage} />
         <Route path={PATHS.summary}>Resumen</Route>
-        <Route path={PATHS.budget}>Presupuesto</Route>
         <Route path="/" render={() => <Redirect to={PATHS.movements} />} />
       </Switch>
     </BrowserRouter>

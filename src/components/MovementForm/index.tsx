@@ -2,16 +2,25 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import useCollection from '../../hooks/useCollection';
+import { useAppSelector } from "../../store";
 import Category from '../../models/Category';
 import classes from './styles.module.scss';
+import { useEffect, useState } from 'react';
 
 type MovementsFormProps = {
     formik: any,
 };
 
 const MovementForm = ({ formik }: MovementsFormProps) => {
-    const { data: categories } = useCollection('categories');
+    const categories = useAppSelector(state => state.categories.categories);
+
+    const [type, setType] = useState<'expense' | 'income'>('expense');
+    const [filteredCategories, setFilteredCategories] = useState<Category[]>(categories);
+
+    useEffect(() => {
+        const newCategories = categories.filter((category: Category) => category.type === type);
+        setFilteredCategories(newCategories);
+    }, [type, categories, setFilteredCategories]);
 
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -21,12 +30,13 @@ const MovementForm = ({ formik }: MovementsFormProps) => {
                 id="type"
                 color="primary"
                 className={classes.toggleButtonGroup}
-                value={formik.values.type}
-                onChange={(e, type) => { formik.setFieldValue('type', type) }}
+                value={type}
+                onChange={(event, value) => setType(value)}
             >
-                <ToggleButton value="expense">Gasto</ToggleButton>
-                <ToggleButton value="income">Ingreso</ToggleButton>
+                <ToggleButton color="error" value="expense">Gasto</ToggleButton>
+                <ToggleButton color="success" value="income">Ingreso</ToggleButton>
             </ToggleButtonGroup>
+
             <TextField
                 fullWidth
                 id="description"
@@ -40,6 +50,7 @@ const MovementForm = ({ formik }: MovementsFormProps) => {
                 error={formik.touched.description && !!formik.errors.description}
                 helperText={formik.touched.description && formik.errors.description}
             />
+
             <TextField
                 fullWidth
                 id="amount"
@@ -52,6 +63,7 @@ const MovementForm = ({ formik }: MovementsFormProps) => {
                 error={formik.touched.amount && !!formik.errors.amount}
                 helperText={formik.touched.amount && formik.errors.amount}
             />
+
             {/* <Autocomplete
                 fullWidth
                 disablePortal
@@ -65,6 +77,7 @@ const MovementForm = ({ formik }: MovementsFormProps) => {
                 })) || []}
                 renderInput={(params) => <TextField {...params} label="Categoría" />}
             /> */}
+
             <FormControl fullWidth margin="dense">
                 <InputLabel
                     id="categoryId"
@@ -82,7 +95,7 @@ const MovementForm = ({ formik }: MovementsFormProps) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.categoryId && !!formik.errors.categoryId}
                 >
-                    {categories?.map((category: Category) => (
+                    {filteredCategories?.map((category: Category) => (
                         <MenuItem key={category.id} value={category.id}>{category.description}</MenuItem>)
                     )}
                 </Select>
@@ -92,6 +105,7 @@ const MovementForm = ({ formik }: MovementsFormProps) => {
                     </FormHelperText>
                 )}
             </FormControl>
+            
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
                     renderInput={props => <TextField fullWidth id="dateTime" margin="dense" {...props} />}

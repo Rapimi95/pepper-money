@@ -9,9 +9,8 @@ const AddCategoryFAB = () => {
     
     return (
         <div className={classes.root}>
-            <Fab onClick={() => history.push(PATHS.addCategory)} color="primary" variant="extended">
-                <AddIcon sx={{ mr: 1 }} />
-                Crear categoría
+            <Fab onClick={() => history.push(PATHS.addCategory)} color="primary">
+                <AddIcon />
             </Fab>
         </div>
     );

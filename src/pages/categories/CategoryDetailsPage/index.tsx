@@ -9,8 +9,10 @@ import * as yup from 'yup';
 import classes from './styles.module.scss';
 
 const categorySchema = yup.object({
-    description: yup.string().required('Requerido.'), 
-});
+    description: yup.string().required('Requerido.'),
+    type: yup.string().required('Requerido.'),
+    budget: yup.number().required('Requerido.'),
+}); 
 
 const CategoryDetailsPage = () => {
     const dispatch = useAppDispatch();
@@ -23,13 +25,17 @@ const CategoryDetailsPage = () => {
     const formik = useFormik({
         initialValues: {
             description: category?.description,
+            type: category?.type,
+            budget: category?.budget,
         },
         validationSchema: categorySchema,
         onSubmit: async (values) => {
             const data = {
                 id: categoryId,
                 category: {
-                    description: values!.description as string, 
+                    description: values!.description as string,
+                    type: values!.type as 'expense' | 'income',
+                    budget: values!.budget as number,
                 },
             };
 

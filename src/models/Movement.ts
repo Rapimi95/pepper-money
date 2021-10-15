@@ -1,17 +1,17 @@
+import Category from "./Category";
+
 class Movement {
     id?: string;
     description: string;
     amount: number;
-    categoryId: string;
-    type: 'expense' | 'income';
+    category: Category;
     dateTime: Date;
 
-    constructor (description: string, amount: number, categoryId: string, type: 'expense' | 'income', dateTime: Date, id?: string) {
+    constructor (description: string, amount: number, category: Category, dateTime: Date, id?: string) {
         this.id = id;
         this.description = description;
         this.amount = amount;
-        this.categoryId = categoryId;
-        this.type = type;
+        this.category = category;
         this.dateTime = dateTime;
     }
 };

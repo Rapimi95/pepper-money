@@ -5,6 +5,7 @@ import BlankLayout from '../../../components/BlankLayout';
 import MovementForm from '../../../components/MovementForm';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { deleteMovement, updateMovement } from '../../../store/slices/movementsSlice';
+import Category from '../../../models/Category';
 import * as yup from 'yup';
 import classes from './styles.module.scss';
 
@@ -12,13 +13,13 @@ const movementSchema = yup.object({
     description: yup.string().required('Requerido.'),
     amount: yup.number().required('Requerido.'),
     categoryId: yup.string().required('Requerido.'),
-    type: yup.string().required('Requerido.'),
     dateTime: yup.date().required('Requerido.'),
 });
 
 const MovementDetailsPage = () => {
     const dispatch = useAppDispatch();
     const movements = useAppSelector(state => state.movements.movements);
+    const categories = useAppSelector(state => state.categories.categories);
     const history = useHistory();
     const {id: movementId} = useParams<{id: string}>();
 
@@ -29,19 +30,20 @@ const MovementDetailsPage = () => {
         initialValues: {
             description: movement?.description || '',
             amount: movement?.amount || 0,
-            categoryId: movement?.categoryId || '',
-            type: movement?.type || 'expense' as 'expense' | 'income',
+            categoryId: movement?.category?.id || '',
             dateTime: new Date(movement?.dateTime || new Date(Date.now())),
         },
         validationSchema: movementSchema,
         onSubmit: async (values) => {
+            const category = categories.find((category: Category) => category.id === values!.categoryId)
+                || new Category('', 'expense', 0);
+
             const data = {
                 id: movementId,
                 movement: {
                     description: values!.description,
                     amount: values!.amount,
-                    categoryId: values!.categoryId,
-                    type: values!.type,
+                    category: category,
                     dateTime: values!.dateTime,
                 },
             };

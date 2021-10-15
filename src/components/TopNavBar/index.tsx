@@ -8,7 +8,7 @@ import { Drawer } from '@mui/material';
 import { useState } from 'react';
 import SidebarMenu from '../SidebarMenu';
 
-const TopNavBar = () => {
+const TopNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     
     const toggleDrawer = () => {
@@ -36,4 +36,4 @@ const TopNavBar = () => {
     );
 };
 
-export default TopNavBar;
+export default TopNavbar;

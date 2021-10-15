@@ -1,11 +1,20 @@
+.toggleButtonContainer {
+  padding: 24px;
+}
+
 .secondaryListItemText {
     text-align: right;
 }
 
 .listItem {
+  border-top: 1px solid #f5f5f5;
   border-bottom: 1px solid #f5f5f5;
 }
 
 .listButton {
   min-height: 60px;
+}
+
+.css-fs2cmm-MuiButtonBase-root-MuiToggleButton-root {
+  border: none !important;
 }

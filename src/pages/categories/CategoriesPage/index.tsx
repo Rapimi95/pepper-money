@@ -1,10 +1,16 @@
 import ListOfCategories from '../../../components/ListOfCategories';
 import AddCategoryFAB from '../../../components/AddCategoryFAB';
 import MainLayout from '../../../components/MainLayout';
-import useCategories from '../../../hooks/useCategories';
+import { useAppDispatch } from '../../../store';
+import { useEffect } from 'react';
+import { setBottomNavbarValue } from '../../../store/slices/uiSlice';
 
 const CategoriesPage = () => {
-    useCategories();
+    const dispatch = useAppDispatch();
+    
+    useEffect(() => {
+        dispatch(setBottomNavbarValue(2));
+    }, [dispatch]);
 
     return (
         <MainLayout>

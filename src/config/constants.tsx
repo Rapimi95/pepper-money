@@ -6,5 +6,4 @@ export const PATHS = {
     addCategory: '/categorias/crear',
     categoryDetails: (id: string | null = null ) => id ? `/categorias/${id}` : '/categorias/:id',
     summary: '/resumen',
-    budget: '/presupuesto',
 };
