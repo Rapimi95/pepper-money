@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import BottomNavbar from '../BottomNavbar';
-import TopNavbar from '../TopNavbar';
+// import BottomNavbar from '../BottomNavbar';
+// import TopNavbar from '../TopNavbar';
 import classes from './styles.module.scss';
 
 type MainLayoutProps = {
@@ -10,9 +10,9 @@ type MainLayoutProps = {
 const MainLayout = ({ children }: MainLayoutProps ) => {
   return (
       <div className={classes.root}>
-        <TopNavbar />
+        {/* <TopNavbar /> */}
         {children}
-        <BottomNavbar />
+        {/* <BottomNavbar /> */}
       </div>
   );
 };
